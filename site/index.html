@@ -232,6 +232,71 @@
             </div>
         </div>
     </section>
+
+    <!-- Футер -->
+    <footer class="bg-blue-950 text-white py-6">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="mb-4 md:mb-0">© 2023 ДронКонтроль. Все права защищены.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-blue-300">Политика конфиденциальности</a>
+                    <a href="#" class="hover:text-blue-300">Условия использования</a>
+                    <a href="#" class="hover:text-blue-300">Карта сайта</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Закрываем мобильное меню после клика
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.remove('open');
+                
+                // Возвращаем иконку меню в исходное состояние
+                const menuButton = document.getElementById('mobile-menu-button');
+                const icon = menuButton.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Мобильное меню с анимацией
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', function(e) {
+            e.stopPropagation(); // Предотвращаем всплытие события
+            mobileMenu.classList.toggle('open');
+            
+            // Меняем иконку
+            const icon = this.querySelector('i');
+            if (mobileMenu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Закрытие меню при клике вне его области
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && e.target !== mobileMenuButton) {
+                mobileMenu.classList.remove('open');
+                const icon = mobileMenuButton.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    </script>
 </body>
 
 </html>
