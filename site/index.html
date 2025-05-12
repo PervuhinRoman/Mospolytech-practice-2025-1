@@ -1,14 +1,118 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkyTron - Управление беспилотниками через интернет</title>
+    <link rel="icon" type="image/x-icon" href="https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/site/assets/skytron.jpeg?raw=true">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            height: calc(100% - 24px);
+            width: 2px;
+            background: #e5e7eb;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* Исправленные стили для мобильного меню */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease;
+        }
+        .mobile-menu.open {
+            max-height: 500px;
+            opacity: 1;
+            transition: max-height 0.5s ease-in, opacity 0.5s ease;
+        }
+        /* Фикс для дат в журнале */
+        .timeline-date {
+            white-space: nowrap;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        /* Стили для горизонтальной прокрутки команды */
+        .team-scroll-container {
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin-bottom: 2rem;
+        }
+        .team-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .team-scroll {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 1.5rem;
+            padding-bottom: 1rem;
+        }
+        .team-member {
+            scroll-snap-align: start;
+            flex: 0 0 auto;
+            width: 250px;
+        }
+        /* Стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        .modal-content {
+            background-color: white;
+            border-radius: 0.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        .full-team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+    </style>
 </head>
-
 <body class="font-sans bg-gray-50 text-gray-800">
     <!-- Навигация -->
     <nav class="bg-white shadow-lg sticky top-0 z-50">
@@ -28,26 +132,22 @@
                     <i class="fas fa-bars text-gray-600 text-xl"></i>
                 </button>
             </div>
-
+            
             <!-- Мобильное меню -->
             <div id="mobile-menu" class="mobile-menu md:hidden bg-white w-full">
                 <div class="px-2 pt-2 pb-4 space-y-2 flex flex-col items-center">
-                    <a href="#home"
-                        class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Главная</a>
-                    <a href="#about"
-                        class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">О
-                        проекте</a>
-                    <a href="#team"
-                        class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Команда</a>
-                    <a href="#journal"
-                        class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Журнал</a>
-                    <a href="#resources"
-                        class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Ресурсы</a>
+                    <a href="#home" class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Главная</a>
+                    <a href="#about" class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">О проекте</a>
+                    <a href="#team" class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Команда</a>
+                    <a href="#journal" class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Журнал</a>
+                    <a href="#resources" class="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Ресурсы</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- Остальное содержимое страницы остается без изменений -->
+    <!-- Герой-секция -->
     <section id="home" class="hero-gradient text-white py-20 md:py-32">
         <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
             <div class="md:w-1/2 mb-10 md:mb-0">
@@ -59,7 +159,7 @@
                 </div>
             </div>
             <div class="md:w-1/2 flex justify-center">
-                <img src="https://images.unsplash.com/photo-1679851377983-00d4f58c6d6f?q=80&w=2235&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Дрон с системой управления" class="rounded-xl shadow-2xl w-full max-w-md">
+                <img src="https://images.unsplash.com/photo-1647733258571-f001185e80c3?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Дрон с системой управления" class="rounded-xl shadow-2xl w-full max-w-md">
             </div>
         </div>
     </section>
@@ -68,7 +168,7 @@
     <section id="about" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">О нашем проекте</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">О проекте</h2>
                 <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
             </div>
             
@@ -96,13 +196,13 @@
                     </div>
                 </div>
                 <div class="md:w-1/2">
-                    <img src="https://images.unsplash.com/photo-1558002038-1055827b30d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Система управления дроном" class="rounded-lg shadow-lg w-full">
+                    <img src="https://plus.unsplash.com/premium_photo-1688678097388-a0c77ea9ace1?q=80&w=2292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Система управления дроном" class="rounded-lg shadow-lg w-full">
                 </div>
             </div>
             
             <div class="flex flexocol md:flex-row items-center">
                 <div class="md:w-1/2 mb-10 md:mb-0 order-2 md:order-1">
-                    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Технологии проекта" class="rounded-lg shadow-lg w-full">
+                    <img src="https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?q=80&w=2173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Технологии проекта" class="rounded-lg shadow-lg w-full">
                 </div>
                 <div class="md:w-1/2 md:pl-10 order-1 md:order-2">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">Технологии и инновации</h3>
@@ -143,33 +243,262 @@
         </div>
     </section>
 
-    <!-- Команда -->
     <section id="team" class="py-20 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Наша команда</h2>
                 <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+                <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Команда проекта состоит из более чем 30-ти студентов 10-ти учебных групп!</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Участник 1 -->
+            <!-- Контейнер с горизонтальной прокруткой -->
+            <div class="team-scroll-container">
+                <div class="team-scroll">
+                    <!-- Участник 1 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/site/assets/Иван_Намрак.jpg?raw=true" alt="Иван Намрак" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Иван Намрак</h3>
+                        <p class="text-blue-600 text-center mb-4">Руководитель проекта</p>
+                        <p class="text-gray-600 mb-4 text-sm">Координация работы команды, взаимодействие с партнёрами, взаимодействие с ВУЗом</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Участник 2 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/site/assets/Роман_Первухин.jpg?raw=true" alt="Роман Первухин" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Роман Первухин</h3>
+                        <p class="text-blue-600 text-center mb-4">Разработчик ПО</p>
+                        <p class="text-gray-600 mb-4 text-sm">Создание программного обеспечения мультимедийной системы, разработка пользовательского интерфейса</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="https://github.com/PervuhinRoman" class="text-gray-500 hover:text-blue-600"  target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Участник 3 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/site/assets/Александр_Брусков.png?raw=true" alt="Александр Брусков" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Александр Брусков</h3>
+                        <p class="text-blue-600 text-center mb-4">Team-lead backend</p>
+                        <p class="text-gray-600 mb-4 text-sm">Распределение задач backend-части проекта, контроль выполнения, разработка серверного ПО</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Участник 4 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Елена Кузнецова" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Елена Кузнецова</h3>
+                        <p class="text-blue-600 text-center mb-4">Специалист по ИИ</p>
+                        <p class="text-gray-600 mb-4 text-sm">Разработка алгоритмов машинного обучения для автоматического управления.</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Участник 5 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/men/12.jpg" alt="Алексей Соколов" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Алексей Соколов</h3>
+                        <p class="text-blue-600 text-center mb-4">Тестировщик</p>
+                        <p class="text-gray-600 mb-4 text-sm">Проведение комплексных тестов системы, выявление и документирование ошибок.</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Кнопка для открытия полного списка -->
+            <div class="text-center mt-8">
+                <button id="show-full-team" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition shadow-lg">
+                    Показать всю команду (31 человек)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальное окно с полным списком команды -->
+    <div id="team-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Вся наша команда</h2>
+            
+            <div class="full-team-grid">
+               <!-- Участник 1 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/site/assets/Иван_Намрак.jpg?raw=true" alt="Иван Намрак" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Иван Намрак</h3>
+                        <p class="text-blue-600 text-center mb-4">Руководитель проекта</p>
+                        <p class="text-gray-600 mb-4 text-sm">Координация работы команды, взаимодействие с партнёрами, взаимодействие с ВУЗом</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Участник 2 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/site/assets/Роман_Первухин.jpg?raw=true" alt="Роман Первухин" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Роман Первухин</h3>
+                        <p class="text-blue-600 text-center mb-4">Разработчик ПО</p>
+                        <p class="text-gray-600 mb-4 text-sm">Создание программного обеспечения мультимедийной системы, разработка пользовательского интерфейса</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="https://github.com/PervuhinRoman" class="text-gray-500 hover:text-blue-600" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Участник 3 -->
+                    <div class="team-member bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                        <div class="flex justify-center mb-4">
+                            <img src="https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/site/assets/Александр_Брусков.png?raw=true" alt="Александр Брусков" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        </div>
+                        <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Александр Брусков</h3>
+                        <p class="text-blue-600 text-center mb-4">Team-lead backend</p>
+                        <p class="text-gray-600 mb-4 text-sm">Распределение задач backend-части проекта, контроль выполнения, разработка серверного ПО</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                
+                <!-- Участник 4 -->
                 <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
                     <div class="flex justify-center mb-4">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Иван Нам" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Елена Кузнецова" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
                     </div>
-                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Иван Намрак</h3>
-                    <p class="text-blue-600 text-center mb-4">Руководитель проекта</p>
-                    <p class="text-gray-600 mb-4">Координация работы команды, взаимодействие с партнёрами</p>
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Елена Кузнецова</h3>
+                    <p class="text-blue-600 text-center mb-4">Специалист по ИИ</p>
+                    <p class="text-gray-600 mb-4 text-sm">Разработка алгоритмов машинного обучения для автоматического управления.</p>
                     <div class="flex justify-center space-x-3">
                         <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
                         <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
                         <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
+                
+                <!-- Участник 5 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/12.jpg" alt="Алексей Соколов" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                    </div>
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Алексей Соколов</h3>
+                    <p class="text-blue-600 text-center mb-4">Тестировщик</p>
+                    <p class="text-gray-600 mb-4 text-sm">Проведение комплексных тестов системы, выявление и документирование ошибок.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Участник 6 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Ольга Морозова" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                    </div>
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Ольга Морозова</h3>
+                    <p class="text-blue-600 text-center mb-4">Дизайнер интерфейсов</p>
+                    <p class="text-gray-600 mb-4 text-sm">Создание удобного и интуитивно понятного интерфейса для операторов системы.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Участник 7 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Сергей Волков" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                    </div>
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Сергей Волков</h3>
+                    <p class="text-blue-600 text-center mb-4">Специалист по безопасности</p>
+                    <p class="text-gray-600 mb-4 text-sm">Обеспечение кибербезопасности системы, защита от взлома и несанкционированного доступа.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Участник 8 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Мария Новикова" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                    </div>
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Мария Новикова</h3>
+                    <p class="text-blue-600 text-center mb-4">Маркетолог</p>
+                    <p class="text-gray-600 mb-4 text-sm">Продвижение проекта, взаимодействие с клиентами и партнерами.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Участник 9 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Павел Белов" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                    </div>
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Павел Белов</h3>
+                    <p class="text-blue-600 text-center mb-4">Системный администратор</p>
+                    <p class="text-gray-600 mb-4 text-sm">Поддержка серверной инфраструктуры, обеспечение бесперебойной работы.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Участник 10 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="Алиса Федорова" class="w-32 h-32 rounded-full object-cover border-4 border-blue-100">
+                    </div>
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-1">Алиса Федорова</h3>
+                    <p class="text-blue-600 text-center mb-4">Технический писатель</p>
+                    <p class="text-gray-600 mb-4 text-sm">Создание документации, руководств пользователя и технических спецификаций.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
-     <section id="journal" class="py-20 bg-white">
+    </div>
+
+
+    <!-- Журнал проекта -->
+    <section id="journal" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Журнал проекта</h2>
@@ -182,13 +511,54 @@
                     <div class="absolute left-0 top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-blue-100 z-10"></div>
                     <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2 sm:mb-0">Завершена разработка прототипа</h3>
-                            <span class="timeline-date text-blue-600 bg-blue-100 rounded-full">10 апреля 2025</span>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 sm:mb-0">Встреча с представителем компании ИТЭЛМА</h3>
+                            <span class="timeline-date text-blue-600 bg-blue-100 rounded-full">28 апреля 2025</span>
                         </div>
-                        <p class="text-gray-600 mb-4">Составлено ТЗ. Назначены ответственные тимлидеры. Установлена связь с заказчиком. Утверждён список участников проекта</p>
+                        <p class="text-gray-600 mb-4">Проведена очная встреча на база университета с официальным представителем ИТЭЛМА. Уточнены требования к реализации. Представлен первичный план работ</p>
                         <div class="grid grid-cols-2 gap-4 mb-4">
-                            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Прототип системы" class="rounded-lg">
-                            <img src="https://images.unsplash.com/photo-1521790797524-b2497295b8a0?q=80&w=2338&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Тестирование прототипа" class="rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Прототип системы" class="rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1543000968-1fe3fd3b714e?q=80&w=2346&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Тестирование прототипа" class="rounded-lg">
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-user mr-2"></i>
+                            <span>Иван Петров</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Запись 2 -->
+                <div class="mb-12 relative pl-8 timeline-item">
+                    <div class="absolute left-0 top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-blue-100 z-10"></div>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
+                        <div class="flex flexocol sm:flex-row sm:justify-between sm:items-center mb-2">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 sm:mb-0">Начало работы</h3>
+                            <span class="timeline-date text-blue-600 bg-blue-100 rounded-full">17 марта 2025</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Выбраны 3 team-лидера по направлениям: backend, frontend и аппаратная часть. Состав проекта разделился на 3 соответствующие команды. Созданы и распределены первые задачи</p>
+                        <div class="video-container mb-4 rounded-lg overflow-hidden">
+                            <!-- <iframe src="https://www.youtube.com/watch?v=tXB7odE1HuA&t=2007s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+                            <img src="https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Подготовка к испытаниям" class="rounded-lg">
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-user mr-2"></i>
+                            <span>Роман Первухин</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Запись 3 -->
+                <div class="mb-12 relative pl-8 timeline-item">
+                    <div class="absolute left-0 top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-blue-100 z-10"></div>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 sm:mb-0">Вводные лекции</h3>
+                            <span class="timeline-date text-blue-600 bg-blue-100 rounded-full">10 марта 2025</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Сформировано и утверждено техническое задание проекта. Назначен Product Manager проекта. Налажен контакт с представителем заказчика от компании ИТЭЛМА.</p>
+                        <div class="grid grid-cols-3 gap-4 mb-4">
+                            <img src="https://images.unsplash.com/photo-1638262052640-82e94d64664a?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Подготовка к испытаниям" class="rounded-lg">
+                            <img src="https://images.unsplash.com/flagged/photo-1550946107-8842ae9426db?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Дрон в полёте" class="rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1619418602850-35ad20aa1700?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Мониторинг параметров" class="rounded-lg">
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="fas fa-user mr-2"></i>
@@ -199,6 +569,98 @@
             </div>
         </div>
     </section>
+
+    <!-- Ресурсы -->
+    <section id="resources" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Полезные ресурсы</h2>
+                <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Ресурс 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="text-blue-600 mb-4 text-4xl">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Мосполитех</h3>
+                    <p class="text-gray-600 mb-4">Наш академический партнёр, предоставляющий исследовательскую базу и экспертизу в области телекоммуникаций</p>
+                    <a href="https://mospolytech.ru/" class="text-blue-600 font-medium inline-flex items-center hover:text-blue-800" target="_blank">
+                        Перейти на сайт
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Ресурс 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="text-blue-600 mb-4 text-4xl">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">ИТЭЛМА</h3>
+                    <p class="text-gray-600 mb-4">Промышленный партнёр проекта, ведущее предприятие по направлению разработки и производства электронных компонентов для различных видов транспорта.</p>
+                    <a href="https://itelma.ru/" class="text-blue-600 font-medium inline-flex items-center hover:text-blue-800" target="_blank">
+                        Перейти на сайт
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Ресурс 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="text-blue-600 mb-4 text-4xl">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Техническая документация</h3>
+                    <p class="text-gray-600 mb-4">Полное описание архитектуры системы, API и протоколов связи для разработчиков.</p>
+                    <a href="#" class="text-blue-600 font-medium inline-flex items-center hover:text-blue-800" target="_blank">
+                        Скачать PDF
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Ресурс 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="text-blue-600 mb-4 text-4xl">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Исходный код</h3>
+                    <p class="text-gray-600 mb-4">Открытые компоненты системы управления с лицензией MIT для образовательных целей.</p>
+                    <a href="#" class="text-blue-600 font-medium inline-flex items-center hover:text-blue-800" target="_blank">
+                        Перейти в репозиторий
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Ресурс 5 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="text-blue-600 mb-4 text-4xl">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Обучающие материалы</h3>
+                    <p class="text-gray-600 mb-4">Видеокурсы и руководства по работе с системой дистанционного управления.</p>
+                    <a href="https://online.mospolytech.ru/" class="text-blue-600 font-medium inline-flex items-center hover:text-blue-800" target="_blank">
+                        Перейти к курсам
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Ресурс 6 -->
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition card-hover">
+                    <div class="text-blue-600 mb-4 text-4xl">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Научные публикации</h3>
+                    <p class="text-gray-600 mb-4">Статьи и исследования, связанные с технологиями проекта в рецензируемых журналах.</p>
+                    <a href="#" class="text-blue-600 font-medium inline-flex items-center hover:text-blue-800" target="_blank">
+                        Читать статьи
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
     <section class="py-16 bg-blue-900 text-white">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between">
@@ -237,7 +699,7 @@
     <footer class="bg-blue-950 text-white py-6">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <p class="mb-4 md:mb-0">© 2023 ДронКонтроль. Все права защищены.</p>
+                <p class="mb-4 md:mb-0">© 2025 SkyTron. Все права защищены.</p>
                 <div class="flex space-x-6">
                     <a href="#" class="hover:text-blue-300">Политика конфиденциальности</a>
                     <a href="#" class="hover:text-blue-300">Условия использования</a>
@@ -246,6 +708,7 @@
             </div>
         </div>
     </footer>
+
     <script>
         // Плавная прокрутка для якорных ссылок
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -296,7 +759,29 @@
                 icon.classList.add('fa-bars');
             }
         });
+
+        // Модальное окно команды
+        const showFullTeamButton = document.getElementById('show-full-team');
+        const teamModal = document.getElementById('team-modal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        showFullTeamButton.addEventListener('click', () => {
+            teamModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeModal.addEventListener('click', () => {
+            teamModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Закрытие модального окна при клике вне его
+        window.addEventListener('click', (event) => {
+            if (event.target === teamModal) {
+                teamModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
     </script>
 </body>
-
 </html>
