@@ -9,8 +9,6 @@
 ## Задание
 **Выполненное задание (создание статического веб-сайта):** [SkyTron](https://pervuhinroman.github.io/Mospolytech-practice-2025-1/)
 
-[Резерв](https://pervuhinroman.github.io/Mospolytech-Practice-Site/)
-
 Задание размещено в папке **task** в файле [README.md](task/README.md).
 
 ## Вариативная часть задания
