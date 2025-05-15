@@ -128,6 +128,30 @@
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 1.5rem;
         }
+        @media (max-width: 767px) {
+            .mobile-stack {
+                flex-direction: column-reverse;
+            }
+            .mobile-padding {
+                padding-left: 0;
+                padding-right: 0;
+            }
+            .mobile-text-center {
+                text-align: center;
+            }
+            .mobile-mb-8 {
+                margin-bottom: 2rem;
+            }
+        }
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background-color: rgba(14, 165, 233, 0.1);
+        }
     </style>
 </head>
 
@@ -195,84 +219,109 @@
         </div>
     </section>
 
-    <!-- О проекте -->
-    <section id="about" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
+     <!-- О проекте -->
+    <section id="about" class="py-12 md:py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12 md:mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">О проекте</h2>
                 <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
             </div>
 
-            <div class="flex flex-col md:flex-row items-center mb-16">
-                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Решаемая проблема</h3>
-                    <p class="text-gray-600 mb-6">Современные системы управления беспилотниками имеют ограниченный
-                        радиус действия и требуют прямой видимости между оператором и аппаратом. Наш проект устраняет
-                        эти ограничения, позволяя управлять техникой из любой точки мира через интернет.</p>
-                    <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 p-2 rounded-full mr-4">
-                            <i class="fas fa-wifi text-blue-600"></i>
+            <div class="flex flex-col md:flex-row items-center mobile-stack">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8 lg:pr-12 mobile-padding">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4 mobile-text-center">Решаемая проблема</h3>
+                    <p class="text-gray-600 mb-6 mobile-text-center">Современные системы управления беспилотниками имеют ограниченный радиус действия и требуют прямой видимости между оператором и аппаратом. Наш проект устраняет эти ограничения, позволяя управлять техникой из любой точки мира через интернет.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start md:items-center">
+                            <div class="feature-icon mr-4">
+                                <i class="fas fa-wifi text-blue-600 text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Глобальное управление через интернет</h4>
+                                <p class="text-sm text-gray-600">Контроль дронов из любой точки мира с минимальной задержкой</p>
+                            </div>
                         </div>
-                        <p class="text-gray-700">Глобальное управление через интернет</p>
-                    </div>
-                    <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 p-2 rounded-full mr-4">
-                            <i class="fas fa-shield-alt text-blue-600"></i>
+                        
+                        <div class="flex items-start md:items-center">
+                            <div class="feature-icon mr-4">
+                                <i class="fas fa-shield-alt text-blue-600 text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Защищённый канал передачи данных</h4>
+                                <p class="text-sm text-gray-600">Квантовое шифрование и защита от взлома</p>
+                            </div>
                         </div>
-                        <p class="text-gray-700">Защищённый канал передачи данных</p>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="bg-blue-100 p-2 rounded-full mr-4">
-                            <i class="fas fa-bolt text-blue-600"></i>
+                        
+                        <div class="flex items-start md:items-center">
+                            <div class="feature-icon mr-4">
+                                <i class="fas fa-bolt text-blue-600 text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Низкая задержка передачи команд</h4>
+                                <p class="text-sm text-gray-600">Оптимизированные протоколы для мгновенного отклика</p>
+                            </div>
                         </div>
-                        <p class="text-gray-700">Низкая задержка передачи команд</p>
                     </div>
                 </div>
-                <div class="md:w-1/2">
+                
+                <div class="md:w-1/2 mobile-mb-8">
                     <img src="https://plus.unsplash.com/premium_photo-1688678097388-a0c77ea9ace1?q=80&w=2292&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Система управления дроном" class="rounded-lg shadow-lg w-full">
+                        alt="Система управления дроном" 
+                        class="rounded-lg shadow-lg w-full max-w-md mx-auto">
                 </div>
             </div>
 
-            <div class="flex flexocol md:flex-row items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0 order-2 md:order-1">
+            <div class="flex flex-col md:flex-row items-center mt-16 mobile-stack">
+                <div class="md:w-1/2 mb-8 md:mb-0 order-2 md:order-1">
                     <img src="https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?q=80&w=2173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Технологии проекта" class="rounded-lg shadow-lg w-full">
+                        alt="Технологии проекта" 
+                        class="rounded-lg shadow-lg w-full max-w-md mx-auto">
                 </div>
-                <div class="md:w-1/2 md:pl-10 order-1 md:order-2">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Технологии и инновации</h3>
-                    <p class="text-gray-600 mb-6">Наш комплекс объединяет передовые технологии в области
-                        телекоммуникаций, кибербезопасности и искусственного интеллекта для создания надежной системы
-                        дистанционного управления.</p>
+                
+                <div class="md:w-1/2 md:pl-8 lg:pl-12 order-1 md:order-2 mobile-padding">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4 mobile-text-center">Технологии и инновации</h3>
+                    <p class="text-gray-600 mb-6 mobile-text-center">Наш комплекс объединяет передовые технологии в области телекоммуникаций, кибербезопасности и искусственного интеллекта для создания надежной системы дистанционного управления.</p>
 
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <div class="text-blue-600 mb-2">
-                                <i class="fas fa-microchip text-2xl"></i>
+                            <div class="flex items-center mb-3">
+                                <div class="feature-icon mr-3">
+                                    <i class="fas fa-microchip text-blue-600"></i>
+                                </div>
+                                <h4 class="font-medium text-gray-800">Аппаратная часть</h4>
                             </div>
-                            <h4 class="font-medium text-gray-800 mb-1">Аппаратная часть</h4>
-                            <p class="text-sm text-gray-600">Специализированные модули связи и обработки данных</p>
+                            <p class="text-sm text-gray-600">Специализированные модули связи и обработки данных с низким энергопотреблением</p>
                         </div>
+                        
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <div class="text-blue-600 mb-2">
-                                <i class="fas fa-code text-2xl"></i>
+                            <div class="flex items-center mb-3">
+                                <div class="feature-icon mr-3">
+                                    <i class="fas fa-code text-blue-600"></i>
+                                </div>
+                                <h4 class="font-medium text-gray-800">Программное обеспечение</h4>
                             </div>
-                            <h4 class="font-medium text-gray-800 mb-1">Программное обеспечение</h4>
-                            <p class="text-sm text-gray-600">Адаптивные алгоритмы управления и анализа данных</p>
+                            <p class="text-sm text-gray-600">Адаптивные алгоритмы управления и анализа данных в реальном времени</p>
                         </div>
+                        
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <div class="text-blue-600 mb-2">
-                                <i class="fas fa-lock text-2xl"></i>
+                            <div class="flex items-center mb-3">
+                                <div class="feature-icon mr-3">
+                                    <i class="fas fa-lock text-blue-600"></i>
+                                </div>
+                                <h4 class="font-medium text-gray-800">Безопасность</h4>
                             </div>
-                            <h4 class="font-medium text-gray-800 mb-1">Безопасность</h4>
-                            <p class="text-sm text-gray-600">Квантовое шифрование каналов связи</p>
+                            <p class="text-sm text-gray-600">Квантовое шифрование каналов связи и защита от DDoS-атак</p>
                         </div>
+                        
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <div class="text-blue-600 mb-2">
-                                <i class="fas fa-brain text-2xl"></i>
+                            <div class="flex items-center mb-3">
+                                <div class="feature-icon mr-3">
+                                    <i class="fas fa-brain text-blue-600"></i>
+                                </div>
+                                <h4 class="font-medium text-gray-800">ИИ-ассистент</h4>
                             </div>
-                            <h4 class="font-medium text-gray-800 mb-1">ИИ-ассистент</h4>
-                            <p class="text-sm text-gray-600">Автоматическое предотвращение аварийных ситуаций</p>
+                            <p class="text-sm text-gray-600">Автоматическое предотвращение аварийных ситуаций и оптимизация маршрутов</p>
                         </div>
                     </div>
                 </div>
