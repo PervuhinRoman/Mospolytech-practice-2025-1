@@ -7,7 +7,9 @@
 | Первухин Роман Александрович | 241-3211 | 09.03.01 | Системная и программная инженерия |
 
 ## Задание
-**Выполненное задание (создание статического веб-сайта):** https://pervuhinroman.github.io/Mospolytech-Practice-Site/
+**Выполненное задание (создание статического веб-сайта):** [SkyTron](https://pervuhinroman.github.io/Mospolytech-practice-2025-1/)
+
+[Резерв](https://pervuhinroman.github.io/Mospolytech-Practice-Site/)
 
 Задание размещено в папке **task** в файле [README.md](task/README.md).
 
