@@ -9,11 +9,11 @@
 ## Задание
 **Выполненное задание (создание статического веб-сайта):** [SkyTron](https://pervuhinroman.github.io/Mospolytech-practice-2025-1/)
 
-Задание размещено в папке **task** в файле [README.md](task/README.md).
+**Документация:** [SkyTron.md](https://github.com/PervuhinRoman/Mospolytech-practice-2025-1/blob/master/docs/SkyTron.md)
 
 ## Вариативная часть задания
 
-[Разработка кросс-платформенного мобильного приложения «GymBro» на фреймворке Flutter](/reports/Yandex_Intensive_Sirius_2025.md)
+**Документация:** [Разработка кросс-платформенного мобильного приложения «GymBro» на фреймворке Flutter](/reports/Yandex_Intensive_Sirius_2025.md)
 
 ## Ответственный по проектной (учебной) практике
 
